@@ -1,0 +1,54 @@
+### 简单使用, 验证三种入参方式
+### 01 validate request body. @validated加在 method 形参
+POST localhost:8080/hello/validation/save
+Content-Type: application/json
+
+{"userId":0,"userName":"str","account":"str","password":"str"}
+
+### 02 validate pathvariable @validated加在类上
+GET localhost:8080/hello/validation/123
+
+### 03 validate request param @validated加在类上
+GET localhost:8080/hello/validation/getByAccount?account=123
+
+### 进阶使用, 分组/嵌套/集合校验
+### 04 validate by groups, saveGroup @min not work
+POST localhost:8080/hello/validation/save2
+Content-Type: application/json
+
+{"userId":0,"userName":"str","account":"str","password":"str"}
+
+### 05 validate by groups. updateGroup @min is working
+POST localhost:8080/hello/validation/update2
+Content-Type: application/json
+
+{"userId":0,"userName":"str","account":"str","password":"str"}
+
+### 06 嵌套, 对象成员字段要加@valid
+POST localhost:8080/hello/validation/save3
+Content-Type: application/json
+
+{"userId":0,"userName":"str","account":"str","password":"str","job":{"jobId":0,"jobName":"str","position":"str"}}
+
+### 07 集合校验, 注意请求参数! 是[] 而不是{}
+POST localhost:8080/hello/validation/saveList
+Content-Type: application/json
+
+[{"userId":0,"userName":"str","account":"str123","password":"str"},{"userId":0,"userName":"str","account":"str","password":"str"}]
+### 错误的!{"list":[{"userId":0,"userName":"str","account":"str","password":"str123"}, {"userId":0,"userName":"str","account":"str123","password":"str"}]}
+
+### 08 自定义校验. a-f 或者 数字组成, 8 到 16 位
+GET localhost:8080/hello/validation/custom/valid?id=a1234567
+
+### 09 编程式校验
+POST localhost:8080/hello/validation/saveWithCodingValidate
+Content-Type: application/json
+
+{"userId":0,"userName":"str","account":"str","password":"str"}
+
+### 10 快速失败. 配置的bean 会代替 默认的spring bean (validator).
+### 可以注释调自定义配置注入的代码, 对比 09, 10 观察. spring boot 有自定义用自定义, 无自定义用默认的.(即自定义会替换默认的)
+POST localhost:8080/hello/validation/fastFail
+Content-Type: application/json
+
+{"userId":0,"userName":"str","account":"str","password":"str"}
